@@ -201,14 +201,14 @@ module Aws
     def max_attempts(opts = {})
       p = opts[:profile] || @profile_name
       if @config_enabled && @parsed_config
-        @parsed_config.fetch(p, {})["max_attempts"]
+        @parsed_config.fetch(p, {})['max_attempts']
       end
     end
 
     def retry_mode(opts = {})
       p = opts[:profile] || @profile_name
       if @config_enabled && @parsed_config
-        @parsed_config.fetch(p, {})["retry_mode"]
+        @parsed_config.fetch(p, {})['retry_mode']
       end
     end
 
