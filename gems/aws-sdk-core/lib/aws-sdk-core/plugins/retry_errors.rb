@@ -34,14 +34,16 @@ module Aws
         :retry_limit,
         default: 3,
         doc_type: Integer,
-        docstring: <<-DOCS)
+        docstring: <<-DOCS) do |cfg|
 The maximum number of times to retry failed requests.  Only
 ~ 500 level server errors and certain ~ 400 level client errors
 are retried.  Generally, these are throttling errors, data
-checksum errors, networking errors, timeout errors and auth
-errors from expired credentials. This option is only used in the
-`legacy` retry mode.
+checksum errors, networking errors, timeout errors, auth errors,
+endpoint discovery, and errors from expired credentials.
+This option is only used in the `legacy` retry mode.
         DOCS
+        resolve_max_attempts(cfg)
+      end
 
       option(
         :retry_max_delay,
@@ -82,9 +84,9 @@ in the `legacy` retry mode.
         default: 'legacy',
         doc_type: String,
         docstring: <<-DOCS) do |cfg|
-Specifies which retry algorithm to use. Legacy is the current retry strategy
-which uses exponential backoff for all retries. Standard and adaptive modes
-use a token bucket approach.
+Specifies which retry algorithm to use. Defaults to `legacy`
+which uses exponential backoff for all retries. Other modes include
+`standard` and `adaptive` which use a token bucket with variable backoff.
         DOCS
         resolve_retry_mode(cfg)
       end
@@ -96,7 +98,7 @@ use a token bucket approach.
         docstring: <<-DOCS) do |cfg|
 Specifies how many HTTP requests an SDK should make for a single
 SDK operation invocation before giving up. Used in `standard` and
-`adaptive` retry modes.
+`adaptive` retry modes, and will also set `retry_limit` in `legacy` mode.
         DOCS
         resolve_max_attempts(cfg)
       end
@@ -121,8 +123,8 @@ SDK operation invocation before giving up. Used in `standard` and
         # Raise if provided value is not a positive integer
         if !value.is_a?(Integer) || value <= 0
           raise ArgumentError,
-                'Must provide a positive integer for '\
-                'max_attempts profile option or for ENV[\'AWS_MAX_ATTEMPTS\']'
+                'Must provide a positive integer for max_attempts profile '\
+                'option or for ENV[\'AWS_MAX_ATTEMPTS\']'
         end
         value
       end

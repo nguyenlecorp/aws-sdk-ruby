@@ -62,6 +62,17 @@ module Aws
         expect(client.config.max_attempts).to eq(1)
       end
 
+      it 'can configure config.retry_limit from max_attempts using ENV' do
+        ENV['AWS_MAX_ATTEMPTS'] = 5
+        expect(client.config.retry_limit).to eq(5)
+      end
+
+      it 'can configure config.retry_limit from max_attempts using config' do
+        allow_any_instance_of(Aws::SharedConfig)
+          .to receive(:max_attempts).and_return(5)
+        expect(client.config.retry_limit).to eq(5)
+      end
+
       it 'raises when max_attempts is not an integer' do
         ENV['AWS_MAX_ATTEMPTS'] = 'string'
         expect { client }.to raise_error(ArgumentError)
