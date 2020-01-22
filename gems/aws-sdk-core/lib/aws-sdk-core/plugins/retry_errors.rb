@@ -146,7 +146,7 @@ SDK operation invocation before giving up. Used in `standard` and
             'ThrottlingException',                    # json services
             'ThrottledException',                     # sns
             'RequestThrottled',                       # sqs
-            'RequestThrottledException',
+            'RequestThrottledException',              # generic service
             'ProvisionedThroughputExceededException', # dynamodb
             'TransactionInProgressException',         # dynamodb
             'RequestLimitExceeded',                   # ec2
@@ -154,7 +154,8 @@ SDK operation invocation before giving up. Used in `standard` and
             'LimitExceededException',                 # kinesis
             'TooManyRequestsException',               # batch
             'PriorRequestNotComplete',                # route53
-            'SlowDown'                                # s3
+            'SlowDown',                               # s3
+            'EC2ThrottledException'                   # ec2
           ]
         )
 
